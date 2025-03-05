@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DuaBypasser</title>
+    <style>
+        body {
+            background: black;
+            color: red;
+            font-family: "Courier New", Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px red;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: red;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+        .rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DuaBypass</h1>
+        <button class="btn" onclick="location.href='cookierefresher.html'">Cookie Refresher</button>
+        <button class="btn" onclick="location.href='age-bypass.html'">13> Bypass</button>
+    </div>
+
+    <div class="rain" id="rain-container"></div>
+</body>
+</html>

