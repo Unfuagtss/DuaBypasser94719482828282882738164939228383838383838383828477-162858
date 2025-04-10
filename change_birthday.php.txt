@@ -1,0 +1,85 @@
+<?php
+require 'vendor/autoload.php';
+
+use GuzzleHttp\Client;
+
+// Function to change Roblox birthday
+function changeRobloxBirthday($username, $password, $newBirthday)
+{
+    $client = new Client([
+        'cookies' => true, // Enable cookies
+        'headers' => [
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+        ],
+    ]);
+
+    // Step 1: Authenticate and get the necessary cookies
+    try {
+        $response = $client->post('https://auth.roblox.com/v1/login', [
+            'form_params' => [
+                'username' => $username,
+                'password' => $password,
+            ],
+        ]);
+
+        // Check if login was successful
+        if ($response->getStatusCode() !== 200) {
+            throw new Exception('Login failed with status code: ' . $response->getStatusCode());
+        }
+
+        $authInfo = json_decode($response->getBody(), true);
+
+        // Check for X-CSRF-TOKEN
+        $csrfToken = '';
+        foreach ($response->getHeaders() as $name => $values) {
+            if (strtolower($name) == 'x-csrf-token') {
+                $csrfToken = $values[0];
+                break;
+            }
+        }
+
+        if (empty($csrfToken)) {
+            throw new Exception('CSRF token not found in login response.');
+        }
+
+        // Step 2: Change the birthday
+        $response = $client->patch('https://accountsettings.roblox.com/v1/users/self/birthdate', [
+            'json' => [
+                'birthDay' => (int) date('d', strtotime($newBirthday)),
+                'birthMonth' => (int) date('m', strtotime($newBirthday)),
+                'birthYear' => (int) date('Y', strtotime($newBirthday)),
+            ],
+            'headers' => [
+                'X-CSRF-TOKEN' => $csrfToken,
+                'Content-Type' => 'application/json',
+            ],
+        ]);
+
+        // Check if the birthday change was successful
+        if ($response->getStatusCode() === 200) {
+            return 'Birthday changed successfully!';
+        } else {
+            throw new Exception('Failed to change birthday. Status code: ' . $response->getStatusCode() . ', Response: ' . $response->getBody());
+        }
+    } catch (Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $birthday = $_POST['birthday'];
+
+    $result = changeRobloxBirthday($username, $password, $birthday);
+
+    // Redirect back to index.php with the result
+    header("Location: index.html?result=" . urlencode($result));
+    exit;
+} else {
+    // If accessed directly without form submission
+    header("Location: index.html");
+    exit;
+}
+?>
